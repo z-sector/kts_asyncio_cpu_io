@@ -1,14 +1,15 @@
 import time
-from concurrent.futures.thread import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
+from cpu_ops.const import CALL_COUNT
 from cpu_ops.utils import countdown, print_exec
 
 
 def main() -> List[int]:
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=CALL_COUNT) as executor:
         futures = [
-            executor.submit(countdown) for _ in range(10)
+            executor.submit(countdown) for _ in range(CALL_COUNT)
         ]
 
         return [f.result() for f in futures]
