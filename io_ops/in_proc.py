@@ -2,28 +2,21 @@ import time
 from concurrent.futures import ProcessPoolExecutor
 from typing import Any, List, Dict
 
-import requests
-
-
-def get_data_from_covidtracking() -> Dict[str, Any]:
-    return requests.get('https://api.covidtracking.com/v1/us/current.json').json()
+from io_ops.const import REQUEST_COUNT
+from io_ops.utils import get_data_from_covidtracking, print_exec
 
 
 def main() -> List[Dict[str, Any]]:
-    with ProcessPoolExecutor(max_workers=10) as executor:
+    with ProcessPoolExecutor(max_workers=REQUEST_COUNT) as executor:
         futures = [
-            executor.submit(get_data_from_covidtracking) for _ in range(10)
+            executor.submit(get_data_from_covidtracking) for _ in range(REQUEST_COUNT)
         ]
 
-        res = [f.result() for f in futures]
-
-    return res
+        return [f.result() for f in futures]
 
 
 if __name__ == "__main__":
     s = time.perf_counter()
     main()
     elapsed = time.perf_counter() - s
-    print(f'=====================================================================')
-    print(f'{__file__} executed in {elapsed:0.4f} seconds.')
-    print(f'=====================================================================')
+    print_exec(elapsed)

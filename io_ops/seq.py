@@ -1,23 +1,16 @@
 import time
 from typing import Any, List, Dict
 
-import requests
+from io_ops.const import REQUEST_COUNT
+from io_ops.utils import get_data_from_covidtracking, print_exec
 
 
 def main() -> List[Dict[str, Any]]:
-    res = []
-    for _ in range(10):
-        res.append(
-            requests.get('https://api.covidtracking.com/v1/us/current.json').json()
-        )
-
-    return res
+    return [get_data_from_covidtracking() for _ in range(REQUEST_COUNT)]
 
 
 if __name__ == "__main__":
     s = time.perf_counter()
     main()
     elapsed = time.perf_counter() - s
-    print(f'=====================================================================')
-    print(f'{__file__} executed in {elapsed:0.4f} seconds.')
-    print(f'=====================================================================')
+    print_exec(elapsed)

@@ -1,21 +1,16 @@
 import time
 from typing import List
 
-from utils import countdown
+from cpu_ops.const import CALL_COUNT
+from cpu_ops.utils import countdown, print_exec
 
 
 def main() -> List[int]:
-    res = []
-    for _ in range(10):
-        res.append(countdown())
-
-    return res
+    return [countdown() for _ in range(CALL_COUNT)]
 
 
 if __name__ == "__main__":
     s = time.perf_counter()
     main()
     elapsed = time.perf_counter() - s
-    print(f'=====================================================================')
-    print(f'{__file__} executed in {elapsed:0.4f} seconds.')
-    print(f'=====================================================================')
+    print_exec(elapsed)
