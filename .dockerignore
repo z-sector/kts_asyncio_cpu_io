@@ -5,5 +5,3 @@
 .idea
 *.pyc
 env
-Pipfile
-Pipfile.lock
