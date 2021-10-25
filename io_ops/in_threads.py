@@ -5,18 +5,17 @@ from typing import Any, List, Dict
 import requests
 
 
+def get_data_from_covidtracking() -> Dict[str, Any]:
+    return requests.get('https://api.covidtracking.com/v1/us/current.json').json()
+
+
 def main() -> List[Dict[str, Any]]:
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [
-            executor.submit(
-                lambda: requests.get('https://api.covidtracking.com/v1/us/current.json'))
-            for _ in range(10)
+            executor.submit(get_data_from_covidtracking) for _ in range(10)
         ]
 
-        res = [
-            f.result().json()
-            for f in futures
-        ]
+        res = [f.result() for f in futures]
 
     return res
 
